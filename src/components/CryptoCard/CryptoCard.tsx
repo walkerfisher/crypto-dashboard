@@ -1,39 +1,26 @@
-import { CryptoCardProps } from '@/types/cryptoCard';
-import Image from 'next/image';
+import Image from "next/image";
+import { Coin } from "@/types/coin";
 
-export default function CryptoCard({
-  name,
-  image,
-  price,
-  symbol,
-  priceChange,
-}: CryptoCardProps) {
-  const isPositive = priceChange >= 0;
-
+export default function CryptoCard({ coin }: { coin: Coin }) {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-4 flex items-center justify-between transition hover:scale-[1.02]">
-      <div className="flex items-center space-x-4">
-        <Image
-          src={image}
-          alt={name}
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{name}</h2>
-          <p className="text-sm text-gray-500 uppercase">{symbol}</p>
-        </div>
-      </div>
-      <div className="text-right">
-        <p className="text-xl font-bold text-gray-900 dark:text-white">
-          ${price.toLocaleString()}
-        </p>
-        <p className={`text-sm font-medium ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
-          {isPositive ? '+' : ''}
-          {priceChange.toFixed(2)}%
-        </p>
-      </div>
+    <div className="w-64 bg-white/10 border border-white/20 rounded-2xl shadow-md backdrop-blur-md p-4 flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+      <Image
+        src={coin.image}
+        alt={coin.name}
+        width={48}
+        height={48}
+        className="mb-2"
+      />
+      <h2 className="text-lg font-semibold">{coin.name}</h2>
+      <p className="text-sm text-gray-400">{coin.symbol.toUpperCase()}</p>
+      <p className="text-xl font-bold">${coin.current_price.toLocaleString()}</p>
+      <p
+        className={`text-sm ${
+          coin.price_change_percentage_24h >= 0 ? "text-green-500" : "text-red-500"
+        }`}
+      >
+        {coin.price_change_percentage_24h.toFixed(2)}%
+      </p>
     </div>
   );
 }

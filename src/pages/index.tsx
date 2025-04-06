@@ -12,21 +12,15 @@ export default function Home({ coins }: HomeProps) {
       <Head>
         <title>Crypto Dashboard</title>
       </Head>
+
       <main className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
           Crypto Dashboard
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {Array.isArray(coins) &&
-          coins.map((coin) => (
-            <CryptoCard
-              key={coin.id}
-              name={coin.name}
-              image={coin.image}
-              price={coin.current_price}
-              symbol={coin.symbol}
-              priceChange={coin.price_change_percentage_24h}
-            />
+
+        <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
+          {coins.map((coin) => (
+            <CryptoCard key={coin.id} coin={coin} />
           ))}
         </div>
       </main>
@@ -34,15 +28,22 @@ export default function Home({ coins }: HomeProps) {
   );
 }
 
-export async function getServerSideProps() {
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd');
-  const coins: Coin[] = await res.json();
+export async function getStaticProps() {
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd');
+    const coins: Coin[] = await res.json();
 
-  console.log("coins", coins);
-
-  return {
-    props: {
-      coins,
-    },
-  };
+    return {
+      props: {
+        coins,
+      },
+      revalidate: 60, // rebuild the page every 60 seconds
+    };
+  } catch (error) {
+    console.error("Failed to fetch coins", error);
+    return {
+      props: { coins: [] },
+      revalidate: 60,
+    };
+  }
 }
