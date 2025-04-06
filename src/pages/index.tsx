@@ -17,7 +17,8 @@ export default function Home({ coins }: HomeProps) {
           Crypto Dashboard
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {coins.map((coin: Coin) => (
+        {Array.isArray(coins) &&
+          coins.map((coin) => (
             <CryptoCard
               key={coin.id}
               name={coin.name}
@@ -36,6 +37,8 @@ export default function Home({ coins }: HomeProps) {
 export async function getServerSideProps() {
   const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd');
   const coins: Coin[] = await res.json();
+
+  console.log("coins", coins);
 
   return {
     props: {
