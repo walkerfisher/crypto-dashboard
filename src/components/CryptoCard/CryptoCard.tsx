@@ -1,13 +1,5 @@
+import { CryptoCardProps } from '@/types/cryptoCard';
 import Image from 'next/image';
-
-
-type CryptoCardProps = {
-  name: string;
-  image: string;
-  price: number;
-  symbol: string;
-  priceChange: number;
-}
 
 export default function CryptoCard({
   name,
