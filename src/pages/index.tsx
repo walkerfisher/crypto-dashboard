@@ -1,12 +1,22 @@
 import Head from "next/head";
 import CryptoCard from "@/components/CryptoCard/CryptoCard";
 import { Coin } from "@/types/coin";
+import { useState } from 'react';
+import SearchInput from "@/components/SearchInput/SearchInput";
 
 type HomeProps = {
   coins: Coin[]
 }
 
 export default function Home({ coins }: HomeProps) {
+  const [search, setSearch] = useState<string>('');
+
+  const filteredCoins = coins.filter((coin) =>
+    coin.name.toLowerCase().includes(search.toLowerCase()) ||
+    coin.symbol.toLowerCase().includes(search.toLowerCase())
+  );
+  
+  
   return (
     <>
       <Head>
@@ -18,10 +28,18 @@ export default function Home({ coins }: HomeProps) {
           Crypto Dashboard
         </h1>
 
+        <div className="flex justify-center mb-8">
+          <SearchInput onSearch={setSearch} placeholder="Search coins..." />
+        </div>
+
         <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
-          {coins.map((coin) => (
+        {filteredCoins.length > 0 ? (
+          filteredCoins.map((coin) => (
             <CryptoCard key={coin.id} coin={coin} />
-          ))}
+          ))
+        ) : (
+          <p className="text-gray-400 text-center w-full">No results found.</p>
+        )}
         </div>
       </main>
     </>
