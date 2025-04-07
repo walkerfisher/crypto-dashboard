@@ -16,7 +16,6 @@ export default function Home({ coins }: HomeProps) {
     coin.symbol.toLowerCase().includes(search.toLowerCase())
   );
   
-  
   return (
     <>
       <Head>
@@ -27,9 +26,11 @@ export default function Home({ coins }: HomeProps) {
         <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
           Crypto Dashboard
         </h1>
-
-        <div className="flex justify-center mb-8">
-          <SearchInput onSearch={setSearch} placeholder="Search coins..." />
+        
+        <div className="sticky top-0 z-10 bg-gray-900 py-4 mb-8 shadow-md">
+          <div className="flex justify-center">
+            <SearchInput onSearch={setSearch} placeholder="Search coins..." />
+          </div>
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
