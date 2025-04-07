@@ -1,6 +1,6 @@
 import Head from "next/head";
 import CryptoCard from "@/components/CryptoCard/CryptoCard";
-import { Coin } from "@/types/coin";
+import { Coin } from "@/types/coin.types";
 import { useState } from 'react';
 import SearchInput from "@/components/SearchInput/SearchInput";
 
@@ -26,7 +26,7 @@ export default function Home({ coins }: HomeProps) {
         <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
           Crypto Dashboard
         </h1>
-        
+
         <div className="sticky top-0 z-10 bg-gray-900 py-4 mb-8 shadow-md">
           <div className="flex justify-center">
             <SearchInput onSearch={setSearch} placeholder="Search coins..." />

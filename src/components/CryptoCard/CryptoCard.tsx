@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Coin } from "@/types/coin";
+import { Coin } from "@/types/coin.types";
 
 export default function CryptoCard({ coin }: { coin: Coin }) {
   return (
