@@ -3,6 +3,7 @@ import CryptoCard from "@/components/CryptoCard/CryptoCard";
 import { Coin } from "@/types/coin.types";
 import { useState } from 'react';
 import SearchInput from "@/components/SearchInput/SearchInput";
+import SortMenu from "@/components/SortMenu/SortMenu";
 
 type HomeProps = {
   coins: Coin[]
@@ -10,11 +11,34 @@ type HomeProps = {
 
 export default function Home({ coins }: HomeProps) {
   const [search, setSearch] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('market_cap_desc');
+
+  const sortOptions = [
+    { label: "Market Cap (High → Low)", value: "market_cap_desc" },
+    { label: "Market Cap (Low → High)", value: "market_cap_asc" },
+    { label: "Price (High → Low)", value: "price_desc" },
+    { label: "Price (Low → High)", value: "price_asc" },
+  ];
 
   const filteredCoins = coins.filter((coin) =>
     coin.name.toLowerCase().includes(search.toLowerCase()) ||
     coin.symbol.toLowerCase().includes(search.toLowerCase())
   );
+
+  const sortedCoins = [...filteredCoins].sort((a, b) => {
+    switch (sortBy) {
+      case "market_cap_desc":
+        return b.market_cap - a.market_cap;
+      case "market_cap_asc":
+        return a.market_cap - b.market_cap;
+      case "price_desc":
+        return b.current_price - a.current_price;
+      case "price_asc":
+        return a.current_price - b.current_price;
+      default:
+        return 0;
+    }
+  });
   
   return (
     <>
@@ -28,14 +52,15 @@ export default function Home({ coins }: HomeProps) {
         </h1>
 
         <div className="sticky top-0 z-10 bg-gray-900 py-4 mb-8 shadow-md">
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4 mb-8">
             <SearchInput onSearch={setSearch} placeholder="Search coins..." />
+            <SortMenu value={sortBy} onChange={setSortBy} options={sortOptions} />
           </div>
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
-        {filteredCoins.length > 0 ? (
-          filteredCoins.map((coin) => (
+        {sortedCoins.length > 0 ? (
+          sortedCoins.map((coin) => (
             <CryptoCard key={coin.id} coin={coin} />
           ))
         ) : (

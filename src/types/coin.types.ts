@@ -1,4 +1,5 @@
 export type Coin = {
+  market_cap: string;
   id: string;
   name: string;
   symbol: string;
